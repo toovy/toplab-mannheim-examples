@@ -1,0 +1,25 @@
+use_bpm 125
+
+with_fx :level, amp: 0.5 do
+  live_loop :techno_with_reverb do
+    use_synth :tb303
+    with_fx :reverb, room: 0.8 do
+      play_pattern_timed [:e2, :e2, :g2, :a2], [0.5, 0.5, 0.5, 0.5], cutoff: 80, release: 0.2
+    end
+    sleep 2  # Pausa para que se note la diferencia
+  end
+
+  live_loop :kick do
+    with_fx :distortion, distort: 0.5 do
+      sample :bd_haus, amp: 2
+      sleep 1
+    end
+  end
+
+  live_loop :hihat do
+    with_fx :reverb, room: 0.8 do
+      sample :drum_cymbal_closed, amp: 0.5, rate: 1.5
+      sleep 0.25
+    end
+  end
+end

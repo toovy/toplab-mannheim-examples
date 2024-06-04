@@ -1,0 +1,27 @@
+use_bpm 120
+
+# kick - every beat
+live_loop :drums do
+  sample :drum_heavy_kick
+  sleep 1
+end
+
+# snare - every other beat
+live_loop :snare do
+  sleep 1
+  sample :drum_snare_hard, amp: 0.7
+  sleep 1
+end
+
+# hi-hat - every 16th note
+live_loop :hihat do
+  sample :drum_cymbal_closed, amp: ring(0.25, 0.5, 0, 0.25).tick
+  sleep 0.25
+end
+
+# open hat - every beat, but offset by 1/2 beat
+live_loop :openhat do
+  sleep 0.25
+  sample :drum_cymbal_open, amp: 0.5, sustain: 0.25, release: 0.01
+  sleep 0.5
+end

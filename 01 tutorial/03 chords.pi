@@ -1,0 +1,220 @@
+use_synth :piano
+
+# Note
+play 60
+sleep 0.25
+play :c3
+sleep 0.25
+
+# Scale
+play_pattern_timed scale(:c3, :major), 0.25
+
+# Chord
+play chord(:c3, :maj)
+sleep 0.25
+play chord(:c3, :min)
+sleep 0.25
+play chord(:c3, :major7)
+sleep 0.25
+play chord(:c3, :m7)
+
+################################################################################
+# play chord(:c3, :major)
+# sleep 1
+# play chord(:d3, :minor)
+# sleep 1
+# play chord(:e3, :minor)
+# sleep 1
+# play chord(:f3, :major)
+# sleep 1
+# play chord(:g3, :major)
+# sleep 1
+# play chord(:a3, :minor)
+# sleep 1
+# play chord(:b3, :diminished)
+# sleep 1
+# play chord(:c3, :major)
+# sleep 1
+
+################################################################################
+# scale(:c3, :major).each do |note|
+#   play chord(note, :major) ❌ wrong
+#   sleep 1
+# end
+
+################################################################################
+# scale(:c3, :major).each_with_index do |note, index|
+#   # Determine the type of chord (major or minor)
+#   chord_type = case index
+#     when 0, 3, 4, 7 # I, IV, V are major chords
+#       :major
+#     when 6
+#       :diminished
+#     else # All other chords are minor
+#       :minor
+#     end
+
+#   play chord(note, chord_type)
+#   sleep 0.125
+# end
+
+################################################################################
+# scale(:c3, :major, num_octaves: 2).each_with_index do |note, index|
+#   # Determine the type of chord (major or minor)
+#   chord_type = case index % 7
+#     when 0, 3, 4 # I, IV, V are major chords
+#       :major
+#     when 6
+#       :diminished
+#     else # All other chords are minor
+#       :minor
+#     end
+#   play chord(note, chord_type)
+#   sleep 0.125
+# end
+
+################################################################################
+# def get_chord_mode_from_scale(root_note, index)
+#   case index % 7
+#   when 0, 3, 4
+#     :major
+#   when 6
+#     :diminished
+#   else
+#     :minor
+#   end
+# end
+
+# root_note = :c3
+# scale(root_note, :major, num_octaves: 2).each_with_index do |note, index|
+#   play chord(note, get_chord_mode_from_scale(root_note, index))
+#   sleep 0.125
+# end
+
+################################################################################
+# def get_chord_mode_from_scale(root_note, index)
+#   majors = [0, 3, 4, 7]
+#   minors = [1, 2, 5]
+#   diminished = [6]
+#   ring_index = index % 7
+#   if majors.include?(ring_index)
+#     :major
+#   elsif minors.include?(ring_index)
+#     :minor
+#   else
+#     :diminished
+#   end
+# end
+
+# root_note = :c3
+# scale(root_note, :major, num_octaves: 2).each_with_index do |note, index|
+#   play chord(note, get_chord_mode_from_scale(root_note, index))
+#   sleep 0.125
+# end
+
+################################################################################
+# module ChordUtil
+#   @map = {
+#     0 => :major,
+#     1 => :minor,
+#     2 => :minor,
+#     3 => :major,
+#     4 => :major,
+#     5 => :minor,
+#     6 => :diminished,
+#   }
+
+#   def self.get_chord_mode_from_scale(root_note, index)
+#     @map[index % 7]
+#   end
+# end
+
+# root_note = :c3
+# scale(root_note, :major, num_octaves: 2).each_with_index do |note, index|
+#   play chord(note, ChordUtil.get_chord_mode_from_scale(root_note, index))
+#   sleep 0.125
+# end
+
+################################################################################
+# module ChordUtil
+#   @map = {
+#     :major => {
+#       0 => :major,
+#       1 => :minor,
+#       2 => :minor,
+#       3 => :major,
+#       4 => :major,
+#       5 => :minor,
+#       6 => :diminished,
+#     },
+#     :minor => {
+#       0 => :minor,
+#       1 => :diminished,
+#       2 => :major,
+#       3 => :minor,
+#       4 => :minor,
+#       5 => :major,
+#       6 => :major,
+#     },
+#   }
+
+#   def self.get_chord_mode_from_scale(root_note, mode, index)
+#     @map[mode][index % 7]
+#   end
+# end
+
+# root_note = :c3
+# mode = :minor
+# scale(root_note, mode, num_octaves: 2).each_with_index do |note, index|
+#   play chord(note, ChordUtil.get_chord_mode_from_scale(root_note, mode, index))
+#   sleep 0.125
+# end
+
+# root_note = :c3
+# mode = :major
+# scale(root_note, mode, num_octaves: 2).each_with_index do |note, index|
+#   play chord(note, ChordUtil.get_chord_mode_from_scale(root_note, mode, index))
+#   sleep 0.125
+# end
+
+################################################################################
+# module ChordUtil
+#   @map = {
+#     :major => [:major, :minor, :minor, :major, :major, :minor, :diminished],
+#     :minor => [:minor, :diminished, :major, :minor, :minor, :major, :major],
+#   }
+
+#   def self.chord_mode(mode, index)
+#     @map[mode][index % 7]
+#   end
+# end
+
+# [:minor, :major].each do |mode|
+#   root_note = :c3
+#   scale(root_note, mode, num_octaves: 2).each_with_index do |note, index|
+#     play chord(note, ChordUtil.chord_mode(mode, index))
+#     sleep 0.125
+#   end
+# end
+
+################################################################################
+# root_note = :c3
+# mode = :minor
+# scale_notes = scale(root_note, mode)
+# scale_notes = scale_notes.take(scale_notes.length - 1)
+
+# scale_notes.each_with_index do |note, index|
+#   degree = (index % 7) + 1  # Scale degrees are 1-based
+#   play chord_degree(degree, root_note, mode)
+#   sleep 0.25
+# end
+
+# root_note = :c3
+# mode = :major
+# scale_notes = scale(root_note, mode)
+
+# scale_notes.each_with_index do |note, index|
+#   degree = (index % 7) + 1  # Scale degrees are 1-based
+#   play chord_degree(degree, root_note, mode)
+#   sleep 0.25
+# end

@@ -1,0 +1,65 @@
+# live_loop :midi_debug do
+#   use_real_time
+#   data = sync "/midi:grid:1/control_change"
+#   control get(:lpf), cutoff: 127 - data[1] if data[0] == 37
+#   control get(:ixi_techno), mix: data[1] / 127.0 if data[0] == 32
+#   control get(:hpf), cutoff: data[1] if data[0] == 36
+#   control get(:reverb), mix: data[1] / 127.0 if data[0] == 38
+#   control get(:bitcrusher), mix: data[1] / 127.0 if data[0] == 39
+# end
+
+# live_loop :midi_notes do
+#   use_real_time
+#   note_data = sync "/midi:grid:1/note_on"
+#   puts note_data
+#   if note_data[0] == 40 && note_data[1] == 127
+#     puts "HERE WE GO!"
+#     with_fx :echo, phase: 0.125, decay: 4 do
+#       with_fx :reverb do
+#         sample :drum_cymbal_open, amp: 0.5
+#       end
+#     end
+#   end
+# end
+
+#fx_ramp_down = line(127, 0, steps: 16 * 4).to_a
+
+# live_loop :ctrl1 do
+#   control get(:hpf), cutoff: 20
+#   sleep 0.25
+# end
+
+# set :fx_alive, nil
+
+with_fx :reverb, room: 1, mix: 0 do |reverb|
+  with_fx :bitcrusher, sample_rate: 3000, bits: 8, mix: 0 do |bitcrusher|
+    with_fx :hpf, cutoff: 0 do |hpf|
+      with_fx :lpf, cutoff: 127 do |lpf|
+        with_fx :ixi_techno, mix: 0 do |ixi_techno|
+          if get(:fx_alive) == nil
+            set :fx_alive, true
+            set :reverb, reverb
+            set :bitcrusher, bitcrusher
+            set :hpf, hpf
+            set :lpf, lpf
+            set :ixi_techno, ixi_techno
+          end
+
+          # if get(:is_init) == 0
+          #   set :is_init, get(:is_init) + 1
+          #   set :reverb, reverb
+          #   set :bitcrusher, bitcrusher
+          #   set :hpf, hpf
+          #   set :lpf, lpf
+          #   set :ixi_techno, ixi_techno
+          # end
+
+          live_loop :sample do
+            sample :loop_amen, beat_stretch: 2
+            sleep 2
+          end
+        end
+      end
+    end
+  end
+end

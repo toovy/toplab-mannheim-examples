@@ -1,0 +1,23 @@
+bass_part_a = scale(:c2, :minor_pentatonic).shuffle
+bass_part_b = scale(:c2, :minor_pentatonic).shuffle
+
+length = bass_part_a.length * 3 + bass_part_b.length
+release_lengths = []
+
+length.times do
+  release_lengths.push(rrand(0.1, 0.15))
+end
+
+live_loop :random_is_not_great do
+  tb = use_synth :tb303
+  3.times do
+    bass_part_a.each do |n|
+      play n, release: release_lengths.tick
+      sleep 0.1
+    end
+  end
+  bass_part_b.each do |n|
+    play n, release: 0.1
+    sleep 0.1
+  end
+end

@@ -1,0 +1,33 @@
+use_bpm 132
+
+with_fx :level, amp: 0.1 do
+  live_loop :four_to_the_floor do
+    sample :bd_tek
+    sleep 1
+  end
+
+  live_loop :hihat do
+    with_fx :compressor, amp: 2 do
+      sample :drum_cymbal_closed
+    end
+    sleep 0.25
+  end
+
+  live_loop :snare do
+    sleep 1
+    sample :drum_snare_hard
+    sleep 1
+  end
+
+  live_loop :melody do
+    use_synth :prophet
+    with_fx :reverb, room: 0.8 do
+      with_fx :echo, mix: 0.5, decay: 2 do
+        with_fx :distortion, distort: 0.5 do
+          play choose([:C4, :E4, :G4, :B4]), amp: 0.2
+          sleep 0.5
+        end
+      end
+    end
+  end
+end

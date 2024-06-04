@@ -1,0 +1,20 @@
+use_bpm 122
+
+# Loop a drum beat
+live_loop :drums do
+  sample :bd_haus, amp: 2
+  sleep 1
+end
+
+# Play a melody
+live_loop :melody do
+  use_synth :dsaw
+  play (scale :e3, :minor_pentatonic).choose, release: 0.5
+  sleep 4
+end
+
+# Add an ambient background
+live_loop :ambient do
+  sample :ambi_choir, rate: 0.5, attack: 2, release: 2
+  sleep 8
+end
